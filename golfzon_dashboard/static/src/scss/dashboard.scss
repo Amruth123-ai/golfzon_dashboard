@@ -1,0 +1,1919 @@
+// Variables
+$primary-color: #1e88e5;
+$secondary-color: #1565c0;
+$accent-color: #0d47a1;
+$text-primary: #263238;
+$text-secondary: #78909c;
+$text-light: #b0bec5;
+$background-light: #f5f7fa;
+$border-color: #e3e8f2;
+$danger-color: #e53935;
+$white: #ffffff;
+$success-color: #43a047;
+$warning-color: #ffb300;
+$info-color: #29b6f6;
+$purple-color: #7e57c2;
+$orange-color: #ff9800;
+
+// Mixins
+@mixin flex($direction: row, $justify: flex-start, $align: stretch) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin card {
+  background: $white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid $border-color;
+}
+
+// Main Dashboard Layout
+.o_golfzon_dashboard {
+  @include flex(row);
+  height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: $background-light;
+  overflow: hidden;
+}
+
+// Menu Drawer
+.menu-drawer {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100vh;
+  background: $secondary-color;
+  color: $white;
+  z-index: 1001;
+  transition: left 0.3s ease;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  @include flex(column);
+
+  &.open {
+    left: 0;
+  }
+
+  .drawer-header {
+    @include flex(row, flex-start, center);
+    gap: 10px;
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid $accent-color;
+    flex-shrink: 0;
+  }
+
+  .drawer-logo {
+    width: 36px;
+    height: 36px;
+    background: $white;
+    border-radius: 6px;
+    object-fit: contain;
+  }
+
+  .drawer-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: $white;
+  }
+
+  .drawer-nav {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .drawer-item {
+    display: block;
+    padding: 12px 0;
+    color: $text-light;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      color: $white;
+      background: $accent-color;
+      padding-left: 8px;
+      border-radius: 4px;
+    }
+
+    &.active {
+      background: linear-gradient(
+        135deg,
+        $primary-color,
+        darken($primary-color, 10%)
+      );
+      color: $white !important;
+      border-radius: 6px;
+      padding-left: 16px;
+      position: relative;
+      box-shadow: 0 2px 8px rgba(30, 136, 229, 0.3);
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 20px;
+        background: $white;
+        border-radius: 0 2px 2px 0;
+      }
+    }
+  }
+}
+
+.main-content {
+  flex: 1;
+  @include flex(column);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.dashboard-header {
+  background: $white;
+  padding: 16px 24px;
+  border-bottom: 1px solid $border-color;
+  @include flex(row, space-between, center);
+  gap: 20px;
+  flex-shrink: 0;
+  height: 80px;
+  min-height: 60px;
+
+  .header-left {
+    @include flex(row, flex-start, end);
+
+    .menu-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 28px;
+      margin-right: 8px;
+      padding: 4px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: $background-light;
+      }
+    }
+
+    .menu-icon {
+      font-size: 20px;
+      color: #1c1b1f;
+    }
+
+    .header-logo {
+      width: 160px;
+    }
+  }
+
+  .header-right {
+    @include flex(row, flex-end, center);
+    gap: 16px;
+
+    .language-switcher {
+      @include flex(row, center, center);
+      gap: 8px;
+      border-right: 1px solid $border-color;
+      padding-right: 16px;
+
+      a {
+        color: #060606;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+
+        &:hover {
+          text-decoration: underline;
+          background-color: white;
+        }
+      }
+    }
+
+    .user-info {
+      @include flex(row, center, center);
+      gap: 8px;
+
+      .username {
+        font-size: 16px;
+        color: #060606;
+        font-weight: 500;
+      }
+    }
+
+    .logout-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #333333;
+      }
+
+      .logout-icon {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+}
+
+.scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+// Golf Course Information Card
+.golf-info-card {
+  @include card;
+  margin: 16px 24px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #dee2e6;
+
+  .golf-info-main {
+    @include flex(row, space-between, center);
+    gap: 12px;
+    flex-wrap: nowrap;
+
+    .info-section {
+      @include flex(row, flex-start, center);
+      gap: 8px;
+      min-width: 160px;
+      flex: 1;
+
+      &.dropdown-section {
+        justify-content: flex-end;
+        min-width: auto;
+        flex: 0 0 auto;
+      }
+
+      .info-icon {
+        font-size: 20px;
+        width: 28px;
+        height: 28px;
+        @include flex(row, center, center);
+        border-radius: 50%;
+        flex-shrink: 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        color: #2788fc;
+      }
+
+      .info-content {
+        @include flex(column, flex-start, flex-start);
+        gap: 2px;
+
+        .info-label {
+          font-size: 11px;
+          color: #060606;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.3px;
+        }
+
+        .info-value {
+          font-size: 13px;
+          color: #555555;
+          font-weight: 600;
+          line-height: 1.2;
+        }
+      }
+
+      .weather-details-btn {
+        background: #f5f4f3;
+        color: #f5f4f3;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        @include flex(row, center, center);
+        gap: 6px;
+
+        &:hover {
+          background: #f5f4f3;
+          transform: translateY(-1px);
+        }
+        span {
+          color: #333333;
+          font-family: pretendard;
+        }
+
+        .dropdown-arrow {
+          color: #333333;
+          font-size: 10px;
+          transition: transform 0.2s;
+
+          &.open {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+
+  .weather-details-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    margin-top: 0;
+
+    &.open {
+      max-height: 300px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid $border-color;
+    }
+
+    .side-by-side-container {
+      @include flex(row, flex-start, stretch);
+      gap: 12px;
+      height: 250px;
+
+      .weather-half {
+        flex: 1;
+        @include flex(column, flex-start, stretch);
+        max-width: 50%;
+        height: 100%;
+
+        .weather-section-header {
+          margin-bottom: 6px;
+
+          h3 {
+            font-size: 12px;
+            color: $text-primary;
+            font-weight: 600;
+            margin: 0;
+          }
+        }
+
+        .horizontal-weather-container {
+          flex: 1;
+          @include flex(column, flex-start, stretch);
+          background: $white;
+          border: 1px solid $border-color;
+          border-radius: 4px;
+          padding: 6px;
+          overflow: hidden;
+          height: 100%;
+
+          .horizontal-weather-scroll {
+            @include flex(row, flex-start, stretch);
+            align-items: stretch;
+            gap: 0;
+            height: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-bottom: 4px;
+
+            &::-webkit-scrollbar {
+              height: 4px;
+            }
+
+            &::-webkit-scrollbar-track {
+              background: rgba(176, 190, 197, 0.1);
+              border-radius: 2px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+              background: #efefef;
+              border-radius: 2px;
+
+              &:hover {
+                background: darken(#efefef, 20%);
+              }
+            }
+
+            .weather-time-slot {
+              @include flex(column, center, center);
+              justify-content: space-around;
+              background: transparent;
+              border-right: 1px solid rgba(227, 232, 242, 0.3);
+              padding: 4px 6px;
+              text-align: center;
+              font-size: 9px;
+              min-width: 60px;
+              flex-shrink: 0;
+              transition: background-color 0.2s;
+              height: 100%;
+
+              &:last-child {
+                border-right: none;
+              }
+
+              &:hover {
+                background-color: rgba(30, 136, 229, 0.05);
+              }
+
+              .time-label {
+                font-weight: 600;
+                color: #8b8b8b;
+                margin-bottom: 2px;
+                font-size: 10px;
+                white-space: nowrap;
+              }
+
+              .weather-icon {
+                font-size: 14px;
+                margin: 2px 0;
+              }
+
+              .temperature {
+                font-weight: 700;
+                color: #131314;
+                margin-bottom: 2px;
+                font-size: 11px;
+                white-space: nowrap;
+              }
+
+              .precipitation-chance {
+                color: #8b8b8b;
+                font-size: 8px;
+                margin-bottom: 1px;
+                white-space: nowrap;
+              }
+
+              .precipitation-amount {
+                color: #8b8b8b;
+                font-size: 8px;
+                font-weight: 500;
+                white-space: nowrap;
+              }
+            }
+          }
+        }
+      }
+
+      .tables-half {
+        flex: 1;
+        @include flex(column, flex-start, stretch);
+        max-width: 50%;
+        height: 100%;
+
+        .tables-section-header {
+          margin-bottom: 6px;
+
+          h3 {
+            font-size: 12px;
+            color: $text-primary;
+            font-weight: 600;
+            margin: 0;
+          }
+        }
+
+        .combined-tables-container {
+          flex: 1;
+          @include flex(column, flex-start, stretch);
+          height: 100%;
+
+          .combined-tables-scroll {
+            flex: 1;
+            @include flex(row, flex-start, flex-start);
+            gap: 8px;
+            overflow: hidden;
+            height: 100%;
+
+            .table-column {
+              flex: 1;
+              min-width: 0;
+              @include flex(column, flex-start, stretch);
+              height: 100%;
+
+              .round-table-wrapper {
+                flex: 1;
+                height: 100%;
+                overflow-y: scroll !important;
+                overflow-x: hidden;
+                border: 1px solid $border-color;
+                border-radius: 4px;
+                background: $white;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+                &::-webkit-scrollbar {
+                  width: 12px !important;
+                  background: $background-light;
+                }
+
+                &::-webkit-scrollbar-track {
+                  background: $background-light;
+                  border-radius: 6px;
+                  border: 1px solid rgba(227, 232, 242, 0.5);
+                }
+
+                &::-webkit-scrollbar-thumb {
+                  background: #efefef;
+                  border-radius: 6px;
+                  border: 2px solid $background-light;
+                  min-height: 20px;
+
+                  &:hover {
+                    background: darken(#efefef, 20%);
+                  }
+
+                  &:active {
+                    background: darken(#efefef, 30%);
+                  }
+                }
+
+                &::-webkit-scrollbar-corner {
+                  background: $background-light;
+                }
+
+                .reservation-table {
+                  width: 100%;
+                  border-collapse: collapse;
+                  font-size: 9px;
+                  min-height: 300px;
+
+                  thead {
+                    background: #f4f4f6;
+                    color: #333333;
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+                    th {
+                      padding: 8px 4px;
+                      text-align: center;
+                      font-weight: 600;
+                      font-size: 8px;
+                      border-right: 1px solid #e0e0e0;
+                      white-space: nowrap;
+                      line-height: 1.2;
+
+                      &:last-child {
+                        border-right: none;
+                      }
+
+                      &:first-child {
+                        text-align: left;
+                      }
+                    }
+                  }
+
+                  tbody {
+                    background-color: #ffffff;
+
+                    tr {
+                      border-bottom: 1px solid #e0e0e0;
+                      transition: all 0.2s;
+                      min-height: 32px;
+
+                      &:hover {
+                        background-color: rgba(30, 136, 229, 0.08);
+                      }
+
+                      td {
+                        padding: 8px 4px;
+                        text-align: center;
+                        border-right: 1px solid #e0e0e0;
+                        font-size: 8px;
+                        white-space: nowrap;
+                        line-height: 1.4;
+                        min-height: 32px;
+                        color: #333333;
+
+                        &:last-child {
+                          border-right: none;
+                        }
+
+                        &:first-child {
+                          font-weight: 600;
+                          text-align: left;
+                          max-width: 80px;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                        }
+
+                        &:nth-child(2) {
+                          font-weight: 500;
+                          font-family: "Courier New", monospace;
+                        }
+
+                        &:nth-child(3) {
+                          font-weight: 500;
+                        }
+
+                        &:nth-child(4) {
+                          font-weight: 600;
+                        }
+
+                        &:nth-child(5) {
+                          font-weight: 700;
+                          border-radius: 2px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Enhanced Performance Indicators Section
+.performance-indicators-section {
+  margin: 24px 24px 16px 24px;
+
+  .main-section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #060606;
+    font-family: "Pretendard", sans-serif;
+    margin-bottom: 20px;
+    padding: 0;
+    letter-spacing: 0.5px;
+  }
+
+  .performance-cards-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+
+    .performance-card {
+      background: $white;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      position: relative;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      }
+
+      .card-header {
+        padding: 16px 20px;
+        color: $white;
+        text-align: left;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          );
+        }
+
+        .card-title {
+          text-align: left;
+          font-size: 14px;
+          font-weight: 600;
+          margin: 0;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          position: relative;
+          z-index: 1;
+          font-family: "Pretendard", sans-serif;
+        }
+      }
+
+      // Different colors for each card
+      &.sales-card .card-header {
+        background: #e4efff;
+        .card-title {
+          color: #3f84d7;
+        }
+      }
+
+      &.order-value-card .card-header {
+        background: #f8edff;
+        .card-title {
+          color: #a06cce;
+        }
+      }
+
+      &.utilization-card .card-header {
+        background: #dde9f7;
+        .card-title {
+          color: #5686bd;
+        }
+      }
+
+      .card-content {
+        padding: 20px;
+        background: $white;
+
+        .metrics-row {
+          @include flex(row, space-between, stretch);
+          gap: 20px;
+
+          .metric-column {
+            flex: 1;
+            text-align: left;
+            position: relative;
+
+            &:first-child::after {
+              content: "";
+              position: absolute;
+              right: -10px;
+              top: 0;
+              bottom: 0;
+              width: 1px;
+              background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                #e0e0e0 20%,
+                #e0e0e0 80%,
+                transparent 100%
+              );
+            }
+
+            .metric-label {
+              font-size: 11px;
+              color: #555555;
+              font-weight: 600;
+              margin-bottom: 12px;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              line-height: 1.3;
+              font-family: "Pretendard", sans-serif;
+            }
+
+            .metric-value {
+              font-size: 18px;
+              font-weight: 700;
+              color: #060606;
+              margin-bottom: 8px;
+              line-height: 1.1;
+              letter-spacing: -0.5px;
+              font-family: "Pretendard", sans-serif;
+            }
+
+            .trend-wrapper {
+              @include flex(row, flex-start, center);
+              gap: 4px;
+
+              .trend-indicator {
+                @include flex(row, center, center);
+                gap: 3px;
+                font-size: 11px;
+                font-weight: 700;
+                padding: 4px 8px;
+                border-radius: 4px;
+
+                .trend-icon {
+                  font-size: 12px;
+                }
+
+                &.trend-up {
+                  background: rgba(76, 175, 80, 0.1);
+                  color: #388e3c;
+                }
+
+                &.trend-down {
+                  background: rgba(244, 67, 54, 0.1);
+                  color: #d32f2f;
+                }
+              }
+
+              .trend-period {
+                font-size: 9px;
+                color: #a5a5a5;
+                font-weight: 500;
+                margin-left: 2px;
+                font-family: "Pretendard", sans-serif;
+              }
+            }
+          }
+        }
+      }
+
+      // Remove the bottom colored line
+      &::after {
+        content: none;
+      }
+    }
+  }
+}
+
+// Reservation Forecast Section
+.reservation-forecast-section {
+  margin: 24px;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    .main-section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: $text-primary;
+      margin: 0;
+    }
+
+    .analysis-period-info {
+      font-size: 12px;
+      color: $text-secondary;
+      font-style: italic;
+    }
+  }
+
+  .forecast-main-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    min-height: 600px;
+
+    // Left Side
+    .forecast-left-side {
+      .line-chart-card {
+        background: $white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        padding: 24px;
+        height: 100%;
+        @include flex(column, flex-start, stretch);
+
+        .chart-header {
+          margin-bottom: 20px;
+          @include flex(row, space-between, flex-start);
+
+          .chart-title-section {
+            .title-with-tooltip {
+              @include flex(row, flex-start, center);
+              gap: 8px;
+              margin-bottom: 8px;
+
+              h3 {
+                font-size: 18px;
+                font-weight: 600;
+                color: $text-primary;
+                margin: 0;
+              }
+
+              .tooltip-wrapper {
+                position: relative;
+
+                .help-icon {
+                  width: 16px;
+                  height: 16px;
+                  border-radius: 50%;
+                  background: $primary-color;
+                  color: $white;
+                  font-size: 10px;
+                  font-weight: bold;
+                  @include flex(row, center, center);
+                  cursor: help;
+
+                  &:hover + .tooltip-content {
+                    display: block;
+                  }
+                }
+
+                .tooltip-content {
+                  display: none;
+                  position: absolute;
+                  bottom: 100%;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  background: $text-primary;
+                  color: $white;
+                  padding: 8px 12px;
+                  border-radius: 4px;
+                  font-size: 12px;
+                  white-space: nowrap;
+                  z-index: 1000;
+
+                  &::after {
+                    content: "";
+                    position: absolute;
+                    top: 100%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    border: 4px solid transparent;
+                    border-top-color: $text-primary;
+                  }
+                }
+              }
+            }
+
+            .chart-meta {
+              .period-text {
+                font-size: 12px;
+                color: $text-secondary;
+              }
+            }
+          }
+
+          .time-period-buttons {
+            @include flex(row, flex-start, center);
+            gap: 8px;
+
+            .period-btn {
+              padding: 8px 16px;
+              border: 1px solid $border-color;
+              border-radius: 4px;
+              background: $white;
+              font-size: 12px;
+              color: $text-secondary;
+              cursor: pointer;
+              transition: all 0.2s;
+
+              &.active,
+              &:hover {
+                background: $primary-color;
+                color: $white;
+                border-color: $primary-color;
+              }
+            }
+          }
+        }
+
+        .line-chart-container {
+          flex: 1;
+          height: 280px;
+          position: relative;
+          margin-bottom: 20px;
+
+          canvas {
+            width: 100% !important;
+            height: 100% !important;
+          }
+        }
+
+        .stats-cards-below {
+          @include flex(column, flex-start, stretch);
+          gap: 12px;
+
+          .stat-card {
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-radius: 6px;
+            padding: 16px;
+            @include flex(row, space-between, center);
+
+            .stat-info {
+              @include flex(row, flex-start, center);
+              gap: 8px;
+
+              .stat-label {
+                font-size: 12px;
+                color: $text-secondary;
+                font-weight: 500;
+              }
+            }
+
+            .stat-value {
+              font-size: 20px;
+              font-weight: 700;
+              color: $text-primary;
+            }
+
+            .stat-comparison {
+              @include flex(row, flex-end, center);
+              gap: 8px;
+
+              .comparison-label {
+                font-size: 10px;
+                color: $text-secondary;
+              }
+
+              .comparison-value {
+                font-size: 12px;
+                font-weight: 600;
+
+                &.increase {
+                  color: $success-color;
+                }
+              }
+            }
+
+            .stat-breakdown {
+              &.horizontal-parts {
+                @include flex(row, flex-end, center);
+                gap: 8px;
+
+                span {
+                  font-size: 11px;
+                  color: $text-secondary;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Right Side
+    .forecast-right-side {
+      @include flex(column, flex-start, stretch);
+      gap: 20px;
+
+      // Heatmap
+      .heatmap-card {
+        background: $white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        padding: 20px;
+        flex: 1;
+
+        .heatmap-main-container {
+          @include flex(row, flex-start, stretch);
+          gap: 16px;
+          height: 100%;
+
+          .heatmap-content {
+            flex: 1;
+            @include flex(column, flex-start, stretch);
+
+            .heatmap-header {
+              margin-bottom: 16px;
+
+              h3 {
+                font-size: 16px;
+                font-weight: 600;
+                color: $text-primary;
+                margin: 0;
+              }
+            }
+
+            .heatmap-container {
+              flex: 1;
+
+              .heatmap-section {
+                @include flex(column, flex-start, stretch);
+                gap: 16px;
+              }
+
+              // Heatmap Table - Fixed Layout
+              .heatmap-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+
+                th,
+                td {
+                  border: 1px solid $border-color;
+                  padding: 8px 12px;
+                  text-align: center;
+                  vertical-align: middle;
+                  font-size: 12px;
+                }
+
+                th {
+                  color: #333333;
+                  font-weight: 600;
+                  font-size: 11px;
+                }
+
+                .row-label {
+                  background: $background-light;
+                  color: $text-primary;
+                  font-weight: 600;
+                  text-align: left !important;
+                  font-size: 10px;
+                  white-space: nowrap;
+                  padding: 8px 12px;
+                }
+
+                .heatmap-cell {
+                  cursor: pointer;
+                  transition: all 0.2s;
+                  font-weight: 600;
+                  color: $white;
+                  position: relative;
+
+                  &:hover {
+                    transform: scale(1.1);
+                    z-index: 10;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                  }
+
+                  // Color coding based on values
+                  &[data-value="0"],
+                  &.bottom-20 {
+                    background: #90caf9;
+                    color: $text-primary;
+                  }
+                  &[data-value="12"],
+                  &.bottom-20-40 {
+                    background: #42a5f5;
+                    color: $text-primary;
+                  }
+                  &[data-value="18"],
+                  &.median-20 {
+                    background: #1976d2;
+                  }
+                  &[data-value="23"],
+                  &.top-20-40 {
+                    background: #1565c0;
+                  }
+                  &.top-20 {
+                    background: #0d47a1;
+                  }
+                }
+              }
+
+              // Heatmap Legend - Horizontal Layout
+              .heatmap-legend {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 15px;
+                margin-top: 15px;
+                flex-wrap: wrap;
+
+                .legend-item {
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                  font-size: 10px;
+                  color: $text-secondary;
+
+                  .legend-color {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 2px;
+
+                    &.top-20 {
+                      background: #0d47a1;
+                    }
+                    &.top-20-40 {
+                      background: #1565c0;
+                    }
+                    &.median-20 {
+                      background: #1976d2;
+                    }
+                    &.bottom-20-40 {
+                      background: #42a5f5;
+                    }
+                    &.bottom-20 {
+                      background: #90caf9;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // Pie Charts Section
+      .pie-charts-card {
+        background: $white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        padding: 20px;
+        flex: 1;
+
+        .pie-charts-header {
+          margin-bottom: 20px;
+
+          h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #060606;
+            margin: 0;
+            text-align: left;
+            font-family: "Pretendard", sans-serif;
+          }
+        }
+
+        .pie-charts-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+
+          .pie-chart-grid-item {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 15px;
+            align-items: center;
+
+            .pie-chart-wrapper {
+              position: relative;
+              width: 90px;
+              height: 90px;
+
+              canvas {
+                width: 90px !important;
+                height: 90px !important;
+              }
+
+              .chart-center-title {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                font-weight: 600;
+                font-size: 10px;
+                text-align: center;
+                color: #060606;
+                padding: 2px 4px;
+                border-radius: 3px;
+                white-space: nowrap;
+                font-family: "Pretendard", sans-serif;
+              }
+            }
+
+            .chart-content {
+              .chart-title {
+                font-size: 14px;
+                font-weight: 600;
+                color: $text-primary;
+                margin-bottom: 10px;
+                font-family: "Pretendard", sans-serif;
+              }
+
+              .chart-legend {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+
+                .legend-entry {
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                  font-size: 11px;
+                  color: $text-secondary;
+                  font-family: "Pretendard", sans-serif;
+
+                  .dot {
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    flex-shrink: 0;
+
+                    // Member Type Colors
+                    &.individual {
+                      background: #1958a4;
+                    }
+                    &.joint {
+                      background: #4489da;
+                    }
+                    &.general {
+                      background: #4c9cfd;
+                    }
+                    &.temporary {
+                      background: #3a96d4;
+                    }
+
+                    // Advance Booking Colors
+                    &.d15 {
+                      background: #1958a4;
+                    }
+                    &.d14 {
+                      background: #4489da;
+                    }
+                    &.d7 {
+                      background: #4c9cfd;
+                    }
+                    &.d3 {
+                      background: #3a96da;
+                    }
+                    &.d1 {
+                      background: #5ab4f0;
+                    }
+                    &.d0 {
+                      background: #91d3ff;
+                    }
+
+                    // Regional Colors
+                    &.phone {
+                      background: #1958a4;
+                    }
+                    &.internet {
+                      background: #4489da;
+                    }
+                    &.agency1 {
+                      background: #4c9cfd;
+                    }
+                    &.agency2 {
+                      background: #3a96d4;
+                    }
+                    &.other {
+                      background: #5ab4f0;
+                    }
+                  }
+
+                  .legend-value {
+                    font-weight: 600;
+                    color: #060606;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Update dashboard content
+.visitor-status {
+  margin-top: 0;
+  margin-bottom: 60px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.visitor-section {
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+
+  .chart-header {
+    margin-bottom: 20px;
+    @include flex(row, space-between, flex-start);
+
+    .chart-title-section {
+      .title-with-tooltip {
+        @include flex(row, flex-start, center);
+        gap: 8px;
+        margin-bottom: 8px;
+
+        h3 {
+          font-size: 18px;
+          font-weight: 600;
+          color: $text-primary;
+          margin: 0;
+        }
+
+        .tooltip-wrapper {
+          position: relative;
+
+          .help-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: $primary-color;
+            color: $white;
+            font-size: 10px;
+            font-weight: bold;
+            @include flex(row, center, center);
+            cursor: help;
+
+            &:hover + .tooltip-content {
+              display: block;
+            }
+          }
+
+          .tooltip-content {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: $text-primary;
+            color: $white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+
+            &::after {
+              content: "";
+              position: absolute;
+              top: 100%;
+              left: 50%;
+              transform: translateX(-50%);
+              border: 4px solid transparent;
+              border-top-color: $text-primary;
+            }
+          }
+        }
+      }
+
+      .chart-meta {
+        .period-text {
+          font-size: 12px;
+          color: $text-secondary;
+        }
+      }
+    }
+
+    .time-period-buttons {
+      @include flex(row, flex-start, center);
+      gap: 8px;
+
+      .period-btn {
+        border: 1px solid $border-color;
+        border-radius: 2px;
+        background: $white;
+        font-size: 12px;
+        color: $text-secondary;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &.active,
+        &:hover {
+          background: $primary-color;
+          color: $white;
+          border-color: $primary-color;
+        }
+      }
+    }
+  }
+
+  .visitor-trend {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 70px;
+    width: 800px;
+
+    .o_dashboard_sales {
+      width: 100%;
+      canvas {
+        width: 100% !important;
+        height: 400px !important;
+      }
+    }
+
+    .trend-title {
+      font-size: 16px;
+      padding-bottom: 16px;
+    }
+
+    .trend-card-title {
+      font-size: 16px;
+      padding-right: 30px;
+    }
+
+    .visitor-trend-graph {
+      padding: 30px;
+    }
+
+    .visitor-trend-card {
+      padding: 20px;
+      width: 100%;
+      height: 69px;
+      display: flex;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .visitor-trend-card-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .visitor-numbers {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+    }
+  }
+
+  .visitor-info {
+    flex: 1;
+    min-width: 0;
+
+    .age-trend-graph {
+      background: white !important;
+      padding: 40px;
+      width: 100%;
+      height: 400px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+      .o_dashboard_sales {
+        width: 100%;
+        height: 100%;
+
+        canvas {
+          width: 100% !important;
+          height: 100% !important;
+          display: block;
+        }
+      }
+
+      .trend-title {
+        font-size: 16px;
+        padding-bottom: 16px;
+      }
+    }
+  }
+
+  .sales-trend {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    min-width: 800px;
+
+    .o_dashboard_sales {
+      width: 100%;
+      canvas {
+        width: 100% !important;
+        height: 400px !important;
+      }
+    }
+
+    .trend-title {
+      font-size: 16px;
+      padding-bottom: 16px;
+    }
+
+    .trend-card-title {
+      font-size: 16px;
+      padding-right: 30px;
+    }
+
+    .visitor-trend-graph {
+      padding: 30px;
+    }
+
+    .visitor-trend-card {
+      padding: 20px;
+      width: 100%;
+      height: 69px;
+      display: flex;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .visitor-trend-card-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .visitor-numbers {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+    }
+  }
+
+  .visitor-info {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 74px;
+
+    .age-trend-graph {
+      background: white !important;
+      padding: 40px;
+      width: 100%;
+      height: 400px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+      .o_dashboard_sales {
+        width: 100%;
+        height: 100%;
+
+        canvas {
+          width: 100% !important;
+          height: 100% !important;
+          display: block;
+        }
+      }
+
+      .trend-title {
+        font-size: 16px;
+        padding-bottom: 16px;
+      }
+    }
+  }
+}
+
+.sales-trends-section {
+  margin-top: 0;
+  margin-bottom: 80px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.sales-trends {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  .chart-header {
+    margin-bottom: 20px;
+    @include flex(row, space-between, flex-start);
+
+    .chart-title-section {
+      .title-with-tooltip {
+        @include flex(row, flex-start, center);
+        gap: 8px;
+        margin-bottom: 8px;
+
+        h3 {
+          font-size: 18px;
+          font-weight: 600;
+          color: $text-primary;
+          margin: 0;
+        }
+
+        .tooltip-wrapper {
+          position: relative;
+
+          .help-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: $primary-color;
+            color: $white;
+            font-size: 10px;
+            font-weight: bold;
+            @include flex(row, center, center);
+            cursor: help;
+
+            &:hover + .tooltip-content {
+              display: block;
+            }
+          }
+
+          .tooltip-content {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: $text-primary;
+            color: $white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1000;
+
+            &::after {
+              content: "";
+              position: absolute;
+              top: 100%;
+              left: 50%;
+              transform: translateX(-50%);
+              border: 4px solid transparent;
+              border-top-color: $text-primary;
+            }
+          }
+        }
+      }
+
+      .chart-meta {
+        .period-text {
+          font-size: 12px;
+          color: $text-secondary;
+        }
+      }
+    }
+
+    .time-period-buttons {
+      @include flex(row, flex-start, center);
+      gap: 8px;
+
+      .period-btn {
+        padding: 8px 16px;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        background: $white;
+        font-size: 12px;
+        color: $text-secondary;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &.active,
+        &:hover {
+          background: $primary-color;
+          color: $white;
+          border-color: $primary-color;
+        }
+      }
+    }
+  }
+
+  .o_dashboard_sales {
+    width: 100%;
+    canvas {
+      width: 100% !important;
+      height: 400px !important;
+    }
+  }
+
+  .trend-title {
+    font-size: 16px;
+    padding-bottom: 16px;
+  }
+
+  .trend-card-title {
+    font-size: 16px;
+  }
+
+  .sales-trend-graph {
+    padding: 30px;
+  }
+
+  .sales-trend-card {
+    padding: 20px;
+    width: 100%;
+    height: 69px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .sales-trend-card-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .sales-numbers {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+  }
+}
+
+// Enhanced Responsive Design
+@media (max-width: 1200px) {
+  .performance-indicators-section {
+    .performance-cards-container {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+
+  .forecast-main-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .performance-indicators-section {
+    margin: 12px 16px;
+
+    .performance-cards-container {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .performance-card {
+      .card-content {
+        padding: 20px 16px;
+
+        .metrics-row {
+          gap: 16px;
+
+          .metric-column {
+            .metric-value {
+              font-size: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .pie-charts-row {
+    grid-template-columns: 1fr;
+  }
+
+  .golf-info-card {
+    .golf-info-main {
+      flex-wrap: wrap;
+      gap: 10px;
+      color: #efefef;
+
+      .info-section {
+        min-width: 140px;
+
+        &.dropdown-section {
+          flex-basis: 100%;
+          justify-content: center;
+          margin-top: 8px;
+          color: #f5f4f3;
+        }
+      }
+    }
+
+    .weather-details-panel {
+      &.open {
+        max-height: 250px;
+        box-shadow: 1px 0px 6px 0px #0000000d;
+      }
+
+      .side-by-side-container {
+        flex-direction: column;
+        height: auto;
+
+        .weather-half,
+        .tables-half {
+          max-width: 100%;
+        }
+
+        .weather-half {
+          .horizontal-weather-container {
+            max-height: 80px;
+          }
+        }
+
+        .tables-half {
+          .combined-tables-container {
+            .combined-tables-scroll {
+              .table-column {
+                .round-table-wrapper {
+                  max-height: 140px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .dashboard-content {
+    .charts-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .dashboard-header {
+    padding: 12px 16px;
+    min-height: 60px;
+  }
+
+  .menu-drawer {
+    .drawer-header {
+      padding: 16px 12px 12px;
+    }
+
+    .drawer-nav {
+      padding: 12px;
+    }
+  }
+}
+
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// Fix for screens wider than 1920px
+@media screen and (min-width: 1920px) {
+  .o_golfzon_dashboard {
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+}
