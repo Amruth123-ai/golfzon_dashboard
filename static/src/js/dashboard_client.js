@@ -657,6 +657,52 @@ class GolfzonDashboard extends Component {
                                         <canvas t-ref="salesChart"/>
                                     </div>
                                 </div>
+
+                                
+                                  <div class="card-gender">
+                                              <div class="card-body">
+                                                <h3 class="mb-3">Gender Ratio</h3>
+                                                <div class="d-flex justify-content-center gap-5">
+                                                  
+                                                  <!-- Male -->
+                                                  
+                                                      <div class="figure">
+                                                        <div class="male-percentage" id="malePercent">62%</div>
+                                                        <div class="svg-wrapper">
+                                                          <svg viewBox="0 0 200 400" preserveAspectRatio="xMidYMid meet">
+                                                            <!-- Grey silhouette -->  
+                                                            <path d="M100 20c25 0 45 20 45 45s-20 45-45 45-45-20-45-45 20-45 45-45zm-25 90h50c30 0 55 25 55 55v70c0 10-8 18-18 18h-15v127h-40v-80h-10v80h-40V253H42c-10 0-18-8-18-18v-70c0-30 25-55 55-55z" fill="#eee"/>
+                                                            <!-- Blue fill -->
+                                                            <clipPath id="maleClip">
+                                                              <path d="M100 20c25 0 45 20 45 45s-20 45-45 45-45-20-45-45 20-45 45-45zm-25 90h50c30 0 55 25 55 55v70c0 10-8 18-18 18h-15v127h-40v-80h-10v80h-40V253H42c-10 0-18-8-18-18v-70c0-30 25-55 55-55z"/>
+                                                            </clipPath>
+                                                            <rect id="maleFill" class="fill" x="0" y="400" width="200" height="0" clip-path="url(#maleClip)"/>
+                                                          </svg>
+                                                        </div>
+                                                        <div class="label">man</div>
+                                                      </div>
+
+                                                  <!-- Female -->
+                                                  <div class="figure">
+                                                      <div class="female-percentage" id="femalePercent">38%</div>
+                                                      <div class="svg-wrapper">
+                                                        <svg viewBox="0 0 200 400" preserveAspectRatio="xMidYMid meet">
+                                                          <!-- Grey silhouette -->
+                                                          <path d="M100 20c25 0 45 20 45 45s-20 45-45 45-45-20-45-45 20-45 45-45zm-40 110h80l40 120h-50v110H110v-70H90v70H70V250H20l40-120z" fill="#eee"/>
+                                                          <!-- Pink fill -->
+                                                          <clipPath id="femaleClip">
+                                                            <path d="M100 20c25 0 45 20 45 45s-20 45-45 45-45-20-45-45 20-45 45-45zm-40 110h80l40 120h-50v110H110v-70H90v70H70V250H20l40-120z"/>
+                                                          </clipPath>
+                                                          <rect id="femaleFill" class="fill female" x="0" y="400" width="200" height="0" clip-path="url(#femaleClip)"/>
+                                                        </svg>
+                                                      </div>
+                                                      <div class="label">female</div>
+                                                    </div>
+
+                                                </div>
+                                              </div>
+                                            </div>
+
                                 <div class="sales-trend-card-container">
                                     <div class="sales-trend-card">
                                         <div class="sales-numbers">
@@ -1790,6 +1836,23 @@ class GolfzonDashboard extends Component {
       );
       console.log("Regional pie chart initialized");
     }
+  
+  function setGenderPercent(male, female) {
+      let maleFill = document.getElementById("maleFill");
+      let femaleFill = document.getElementById("femaleFill");
+      
+      maleFill.setAttribute("y", 400 - (400 * male / 100));
+      maleFill.setAttribute("height", 400 * male / 100);
+      femaleFill.setAttribute("y", 400 - (400 * female / 100));
+      femaleFill.setAttribute("height", 400 * female / 100);
+      
+      document.getElementById("malePercent").textContent = male + "%";
+      document.getElementById("femalePercent").textContent = female + "%";
+    }
+    
+    // Example values
+    setGenderPercent(62, 38);
+  
   }
 }
 
